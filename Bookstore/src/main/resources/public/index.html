@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Books</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<button id="loadBooks">LOAD ALL BOOKS</button>
+
+<div class="search-container">
+    <input type="search" id="search-input" name="Search" placeholder="Search for a title">
+    <input type="search" id="search-author" name="authorSearch" placeholder="Search for an author">
+    <button id="search-button">Search Book</button>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th id="page-num">Page 1</th>
+        <th>
+            <button id="prev-btn"><< Prev</button><button id="next-btn">Next >></button>
+        </th>
+    </tr>
+
+    <tr>
+        <th>Number</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Action</th>
+        <th>Comments</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>#1</td>
+        <td>Book 1</td>
+        <td>Author 1</td>
+        <td>
+            <button>Edit</button>
+            <button>Delete</button>
+            <button>Comments</button>
+        </td>
+        <td><span>Comments</span></td>
+    </tr>
+    <tr>
+        <td>#2</td>
+        <td>Book 2</td>
+        <td>Author 2</td>
+        <td>
+            <button>Edit</button>
+            <button>Delete</button>
+            <button>Comments</button>
+        </td>
+        <td><span>Comments</span></td>
+    </tr>
+    </tbody>
+</table>
+
+<div id="form">
+    <h3>FORM</h3>
+    <label>TITLE</label>
+    <input type="text" name="title" placeholder="Title...">
+    <label>AUTHOR</label>
+    <input type="text" name="author" placeholder="Author...">
+    <button>Submit</button>
+</div>
+<script src="/static/index.js"></script>
+</body>
+</html>
