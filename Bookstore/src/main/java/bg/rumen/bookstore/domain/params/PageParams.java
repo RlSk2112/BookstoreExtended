@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PageParams {
 
-    private static final Integer LIMIT = 5;
+    public static final Integer LIMIT = 5;
 
     @Positive
     private Integer page;

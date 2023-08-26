@@ -1,17 +1,22 @@
 package bg.rumen.bookstore.domain.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "books")
 public class Book extends BaseEntity {
@@ -22,9 +27,13 @@ public class Book extends BaseEntity {
     @Column(name = "author")
     private String author;
 
-    @ManyToMany(targetEntity = Comment.class)
-    @JoinTable(name = "books_comments",
-            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "comment_id", referencedColumnName = "id"))
+    @OneToMany(targetEntity = Comment.class, mappedBy = "book")
+    @Cascade(CascadeType.ALL)
     private List<Comment> comments;
+
+    public Book(String title, String  author) {
+        this.title = title;
+        this.author = author;
+        this.comments = new ArrayList<>();
+    }
 }

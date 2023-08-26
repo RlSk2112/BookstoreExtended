@@ -2,7 +2,6 @@ window.addEventListener('load', attachEvents)
 
 function attachEvents() {
 
-
     const allDomElements = {
         loadButton: document.getElementById('loadBooks'),
         table: document.getElementsByTagName('table')[0],
@@ -23,7 +22,6 @@ function attachEvents() {
         submitButton: allDomElements.form.children[5],
     }
 
-
     let allCommentPagesObject = {};
 
     let page = 1;
@@ -33,7 +31,6 @@ function attachEvents() {
 
     const BASE_URL = '/api/bookstore';
     const COMMENTS_URL = '/api/bookstore/comments';
-
 
     allDomElements.loadButton.addEventListener('click', loadFirstPage);
     allDomElements.searchButton.addEventListener('click', searchHandler);
@@ -45,7 +42,6 @@ function attachEvents() {
     allDomElements.nextPage.addEventListener('click', nextHandler);
 
     function loadHandler(event) {
-
         if (event) {
             event.preventDefault();
         }
@@ -68,7 +64,6 @@ function attachEvents() {
                 allDomElements.pageNum.textContent = `Page ${page} of ${totalPages}`;
                 allDomElements.tbody.innerHTML = '';
 
-
                 let currentBookNum = 1;
                 if (page > 1) {
                     currentBookNum = currentBookNum + (page - 1) * 5;
@@ -87,7 +82,6 @@ function attachEvents() {
                     allDomElements.tbody.appendChild(tr);
                 }
 
-
             })
             .catch((err) => {
                 console.error(err);
@@ -103,7 +97,6 @@ function attachEvents() {
     }
 
     function createHandler(event) {
-
         if (event) {
             event.preventDefault();
         }
@@ -111,7 +104,6 @@ function attachEvents() {
         if (newDomElements.authorInput.value === '' || newDomElements.titleInput.value === '') {
             return;
         }
-
 
         let currentTitle = newDomElements.titleInput.value;
         let currentAuthor = newDomElements.authorInput.value;
@@ -128,7 +120,6 @@ function attachEvents() {
             },
             body: payload
         };
-
 
         fetch(BASE_URL, requestOptions)
             .then(() => {
@@ -155,11 +146,9 @@ function attachEvents() {
         searchedId = searchedTr.id;
         newDomElements.formTitle.textContent = 'Edit FORM';
 
-
         let tds = Array.from(searchedTr.children);
         let firstTd = tds[1];
         let secondTd = tds[2];
-
 
         newDomElements.titleInput.value = firstTd.textContent;
         newDomElements.authorInput.value = secondTd.textContent;
@@ -176,7 +165,6 @@ function attachEvents() {
     }
 
     function saveHandler(event) {
-
         if (event) {
             event.preventDefault();
         }
@@ -205,7 +193,6 @@ function attachEvents() {
                 console.error(err);
             });
 
-
         this.remove();
         let submitButton = document.createElement('button');
         submitButton.textContent = 'Submit';
@@ -226,7 +213,6 @@ function attachEvents() {
         let requestOptions = {
             method: "DELETE",
         };
-
 
         fetch(`${BASE_URL}/${searchedId}`, requestOptions)
             .then(() => {
@@ -292,7 +278,6 @@ function attachEvents() {
             bookTitle: name,
             comment: input.value
         });
-
 
         let reqOptions = {
             method: "POST",
@@ -414,9 +399,6 @@ function attachEvents() {
             }
         };
 
-
-
-
         fetch(`${COMMENTS_URL}/${commentId}`, requestOptions)
             .then(() => {
                 allCommentPagesObject[bookId].commentRecords--;
@@ -431,7 +413,6 @@ function attachEvents() {
             .catch((err) => {
                 console.error(err);
             });
-
     }
 
     function searchHandler(event) {
@@ -441,7 +422,6 @@ function attachEvents() {
         }
 
         page = 1;
-
 
         if (event) {
             event.preventDefault();
@@ -561,7 +541,6 @@ function attachEvents() {
 
         let bookTitle = allDomElements.searchInput.value;
         let authorToSearch = allDomElements.searchAuthor.value;
-
 
         let url;
         if (bookTitle !== '' && authorToSearch !== '') {
