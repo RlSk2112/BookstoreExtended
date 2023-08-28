@@ -7,8 +7,12 @@ import bg.rumen.bookstore.domain.entities.Book;
 import bg.rumen.bookstore.domain.entities.Comment;
 import bg.rumen.bookstore.domain.params.PageParams;
 import bg.rumen.bookstore.repository.CommentRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,12 +27,12 @@ public class CommentService {
 
     private final ModelMapper modelMapper;
 
+    @Transactional
     public PageResult<CommentExportDto> getComments(Integer id, PageParams pageParams) {
-        int start = pageParams.getPage() * pageParams.getLimit() - (pageParams.getLimit() - 1);
-        int end = pageParams.getPage() * pageParams.getLimit();
+        Pageable pageRequest = PageRequest.of(pageParams.getPage() - 1, pageParams.getLimit());
 
-        List<Comment> allByIdLessThanOrderById =
-                commentRepository.findAllCommentsForBookForCurrentPage(id, start, end);
+        Page<Comment> allByIdLessThanOrderById =
+                commentRepository.findAllByBook_Id(id, pageRequest);
 
         List<CommentExportDto> exportDtos = allByIdLessThanOrderById.stream()
                 .map(comment -> modelMapper.map(comment, CommentExportDto.class))
@@ -40,10 +44,12 @@ public class CommentService {
         return pageResult;
     }
 
+    @Transactional
     public void deleteCommentById(Integer id) {
         commentRepository.deleteById(id);
     }
 
+    @Transactional
     public void addComment(Integer id, CommentImportDto commentImportDto) {
         if (commentImportDto == null) {
             throw new IllegalArgumentException("Comment cannot be null!");

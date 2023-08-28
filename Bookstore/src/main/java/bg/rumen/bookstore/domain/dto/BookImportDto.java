@@ -6,12 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.io.Serializable;
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookImportDto implements Serializable {
+public class BookImportDto {
 
     @NonNull
     @NotBlank

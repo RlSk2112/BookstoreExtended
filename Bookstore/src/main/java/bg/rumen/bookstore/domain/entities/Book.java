@@ -1,10 +1,6 @@
 package bg.rumen.bookstore.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "books")
-public class Book extends BaseEntity {
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @Column(name = "title")
     private String title;

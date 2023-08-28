@@ -9,9 +9,12 @@ import bg.rumen.bookstore.domain.params.PageParams;
 import bg.rumen.bookstore.exceptions.NoSuchBookWithIdException;
 import bg.rumen.bookstore.repository.BookRepository;
 import com.google.gson.Gson;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -33,26 +36,33 @@ public class BookService {
 
     private final Gson gson;
 
+    @Transactional
     public PageResult<BookExportDto> getBooksPageResult(BookSearchParams bookSearchParams, PageParams pageParams) {
         if (!areInitialBooksImported()) {
             addInitialBooks();
         }
-        int start = pageParams.getPage() * pageParams.getLimit() - (pageParams.getLimit() - 1);
-        int end = pageParams.getPage() * pageParams.getLimit();
 
-        List<Book> allByIdLessThanOrderById =
-                bookRepository.findAllBooksForCurrentPage(start, end);
+        Pageable pageRequest = PageRequest.of(pageParams.getPage() - 1, pageParams.getLimit());
 
-        List<BookExportDto> exportDtos = allByIdLessThanOrderById.stream()
+        Page<Book> allByTitle =
+                bookRepository.findAllByTitleAndAuthor(bookSearchParams.getBookTitle(),
+                        bookSearchParams.getAuthor(),
+                        pageRequest);
+
+        Integer countResults = bookRepository.getBooksCountByTitleAndAuthor(bookSearchParams.getBookTitle(),
+                bookSearchParams.getAuthor());
+
+        List<BookExportDto> exportDtos = allByTitle.stream()
                 .map(book -> modelMapper.map(book, BookExportDto.class))
                 .toList();
 
         PageResult<BookExportDto> pageResult = new PageResult<>();
         pageResult.setItems(exportDtos);
-        pageResult.setTotalRecords((int) bookRepository.count());
+        pageResult.setTotalRecords(countResults);
         return pageResult;
     }
 
+    @Transactional
     public Book getBookById(Integer id) {
         Optional<Book> byId = bookRepository.findById(id);
         if (byId.isEmpty()) {
@@ -61,6 +71,7 @@ public class BookService {
         return byId.get();
     }
 
+    @Transactional
     public void editBook(Integer id, Book book) {
         if (book.getTitle() != null) {
             bookRepository.updateBookTitleById(book.getTitle(), id);
@@ -70,6 +81,7 @@ public class BookService {
         }
     }
 
+    @Transactional
     public void addBook(BookImportDto bookImportDto) {
         if (bookImportDto == null) {
             throw new IllegalArgumentException("Book to import cannot be null!");
@@ -78,6 +90,7 @@ public class BookService {
         bookRepository.save(book);
     }
 
+    @Transactional
     public void deleteBookById(Integer id) {
         bookRepository.deleteById(id);
     }

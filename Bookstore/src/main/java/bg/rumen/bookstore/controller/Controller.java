@@ -10,55 +10,49 @@ import bg.rumen.bookstore.domain.params.BookSearchParams;
 import bg.rumen.bookstore.domain.params.PageParams;
 import bg.rumen.bookstore.service.BookService;
 import bg.rumen.bookstore.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/bookstore")
+@RequestMapping("/api")
+@AllArgsConstructor
 public class Controller {
 
     private final BookService bookService;
 
     private final CommentService commentService;
 
-    @Autowired
-    public Controller(BookService bookService, CommentService commentService) {
-        this.bookService = bookService;
-        this.commentService = commentService;
-    }
-
-    @GetMapping
+    @GetMapping("/books")
     public PageResult<BookExportDto> getBooks(BookSearchParams searchParams, PageParams pageParams) {
         return this.bookService.getBooksPageResult(searchParams, pageParams);
     }
 
-    @PostMapping
+    @PostMapping("/books")
     public void addBook(@RequestBody BookImportDto book) {
         bookService.addBook(book);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/books/{id}")
     public void updateBook(@RequestBody Book book, @PathVariable Integer id) {
         this.bookService.editBook(id, book);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/books/{id}")
     public void deleteBook(@PathVariable Integer id) {
         this.bookService.deleteBookById(id);
-
     }
 
-    @GetMapping("/comments/{id}")
+    @GetMapping("/book-comments/{id}")
     public PageResult<CommentExportDto> getComments(@PathVariable Integer id, PageParams pageParams) {
         return this.commentService.getComments(id, pageParams);
     }
 
-    @PostMapping("/comments/{id}")
+    @PostMapping("/book-comments/{id}")
     public void addComment(@PathVariable Integer id, @RequestBody CommentImportDto commentImportDto) {
         this.commentService.addComment(id, commentImportDto);
     }
 
-    @DeleteMapping("/comments/{id}")
+    @DeleteMapping("/book-comments/{id}")
     public void deleteCommentById(@PathVariable Integer id) {
         this.commentService.deleteCommentById(id);
     }

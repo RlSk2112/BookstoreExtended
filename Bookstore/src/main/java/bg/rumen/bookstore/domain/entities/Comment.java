@@ -9,7 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "comments")
-public class Comment extends BaseEntity{
+public class Comment {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer commentId;
 
     @Column(name = "comment")
     private String comment;

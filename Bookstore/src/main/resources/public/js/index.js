@@ -29,8 +29,8 @@ function attachEvents() {
     let commentsPage = 1;
     let allCommentsRecords = 0;
 
-    const BASE_URL = '/api/bookstore';
-    const COMMENTS_URL = '/api/bookstore/comments';
+    const BASE_URL = '/api/books';
+    const COMMENTS_URL = '/api/book-comments';
 
     allDomElements.loadButton.addEventListener('click', loadFirstPage);
     allDomElements.searchButton.addEventListener('click', searchHandler);
@@ -545,13 +545,13 @@ function attachEvents() {
         let url;
         if (bookTitle !== '' && authorToSearch !== '') {
 
-            url = `/api/bookstore?bookTitle=${encodeURIComponent(bookTitle)}&author=${encodeURIComponent(authorToSearch)}&page=${page}`;
+            url = `/api/books?bookTitle=${encodeURIComponent(bookTitle)}&author=${encodeURIComponent(authorToSearch)}&page=${page}`;
         } else if (bookTitle === '' && authorToSearch !== '') {
-            url = `/api/bookstore?author=${encodeURIComponent(authorToSearch)}&page=${page}`;
+            url = `/api/books?author=${encodeURIComponent(authorToSearch)}&page=${page}`;
         } else if (bookTitle !== '' && authorToSearch === '') {
-            url = `/api/bookstore?bookTitle=${encodeURIComponent(bookTitle)}&page=${page}`;
+            url = `/api/books?bookTitle=${encodeURIComponent(bookTitle)}&page=${page}`;
         } else if (bookTitle === '' && authorToSearch === '') {
-            url = `/api/bookstore?page=${page}`;
+            url = `/api/books?page=${page}`;
         }
 
         return url;
